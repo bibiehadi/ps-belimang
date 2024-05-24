@@ -11,8 +11,8 @@ type Merchant struct {
 	Name             string    `json:"name"`
 	MerchantCategory string    `json:"merchantCategory"`
 	ImageURL         string    `json:"imageUrl"`
-	Latitude         string    `json:"latitude"`
-	Longitude        string    `json:"longitude"`
+	Latitude         float64   `json:"latitude"`
+	Longitude        float64   `json:"longitude"`
 	CreatedAt        time.Time `json:"createdAt"`
 	UpdatedAt        time.Time `json:"updatedAt"`
 }
@@ -23,7 +23,6 @@ type Location struct {
 }
 
 type MerchantRequest struct {
-	ID               int       `json:"id"`
 	Name             string    `json:"name"`
 	MerchantCategory string    `json:"merchant_category"`
 	ImageURL         string    `json:"image_url"`
