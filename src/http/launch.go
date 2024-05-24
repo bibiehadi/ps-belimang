@@ -1,6 +1,7 @@
 package http
 
 import (
+	v1 "belimang/src/http/routes/v1"
 	"fmt"
 	"net/http"
 	"os"
@@ -36,14 +37,14 @@ func (r *Http) Launch() {
 		return c.HTML(http.StatusOK, fmt.Sprintf("API Base Code for %s", os.Getenv("ENVIRONMENT")))
 	})
 
-	// v1 := v1routes.New(
-	// 	&v1routes.V1Routes{
-	// 		Echo: e.Group(basePath),
-	// 		Db:   r.DB,
-	// 	},
-	// )
+	v1 := v1.New(
+		&v1.V1Routes{
+			Echo: e.Group(basePath),
+			Db:   r.DB,
+		},
+	)
 
-	// v1.MountAuth()
+	v1.MountAuth()
 
 	e.Logger.Fatal(e.Start(":8080"))
 }
