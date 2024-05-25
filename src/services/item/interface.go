@@ -7,6 +7,7 @@ import (
 
 type ItemService interface {
 	Create(item entities.MerchantItemRequest) (entities.MerchantItem, error)
+	GetAll(params entities.MerchantItemQueryParams) ([]entities.MerchantItemResponse, entities.MerchantItemMetaResponse, error)
 }
 
 type itemService struct {
