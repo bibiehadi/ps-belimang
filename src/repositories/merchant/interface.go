@@ -8,6 +8,7 @@ import (
 
 type MerchantRepository interface {
 	Create(merchant entities.Merchant) (entities.Merchant, error)
+	FindAll(params entities.MerchantQueryParams) ([]entities.MerchantResponse, entities.MerchantMetaResponse, error)
 	// UsernameIsExist(username string) bool
 	// FindByUsername(username string) (entities.Merchant, error)
 }

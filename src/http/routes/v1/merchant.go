@@ -8,10 +8,12 @@ import (
 
 func (i *V1Routes) MountMerchant() {
 	gAdmin := i.Echo.Group("/admin")
+	gMerchant := gAdmin.Group("/merchants")
 
 	merchantRepository := merchantRepository.New(i.Db)
 	merchantService := merchantService.New(merchantRepository)
 	merchantController := merchantController.New(merchantService)
 
-	gAdmin.POST("/merchants", merchantController.Create)
+	gMerchant.GET("", merchantController.FindAll)
+	gMerchant.POST("", merchantController.Create)
 }
