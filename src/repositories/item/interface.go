@@ -8,6 +8,7 @@ import (
 
 type ItemRepository interface {
 	Create(item entities.MerchantItemRequest) (entities.MerchantItem, error)
+	GetAll(params entities.MerchantItemQueryParams) ([]entities.MerchantItemResponse, entities.MerchantItemMetaResponse, error)
 }
 
 type itemRepository struct {
