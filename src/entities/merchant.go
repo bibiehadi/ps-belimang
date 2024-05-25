@@ -23,12 +23,10 @@ type Location struct {
 }
 
 type MerchantRequest struct {
-	Name             string    `json:"name"`
-	MerchantCategory string    `json:"merchant_category"`
-	ImageURL         string    `json:"image_url"`
-	Location         Location  `json:"location"`
-	CreatedAt        time.Time `json:"created_at"`
-	UpdatedAt        time.Time `json:"updated_at"`
+	Name             string   `json:"name"`
+	MerchantCategory string   `json:"merchantCategory"`
+	ImageURL         string   `json:"imageUrl"`
+	Location         Location `json:"location"`
 }
 
 func validateMerchant(merchant *MerchantRequest) error {
