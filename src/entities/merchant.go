@@ -1,8 +1,6 @@
 package entities
 
 import (
-	"errors"
-	"regexp"
 	"time"
 )
 
@@ -23,44 +21,32 @@ type Location struct {
 }
 
 type MerchantRequest struct {
-	Name             string    `json:"name"`
-	MerchantCategory string    `json:"merchant_category"`
-	ImageURL         string    `json:"image_url"`
-	Location         Location  `json:"location"`
-	CreatedAt        time.Time `json:"created_at"`
-	UpdatedAt        time.Time `json:"updated_at"`
+	Name             string   `json:"name"`
+	MerchantCategory string   `json:"merchantCategory"`
+	ImageURL         string   `json:"imageUrl"`
+	Location         Location `json:"location"`
 }
 
-func validateMerchant(merchant *MerchantRequest) error {
-	// Validate Name
-	if len(merchant.Name) < 2 || len(merchant.Name) > 30 {
-		return errors.New("name must be between 2 and 30 characters")
-	}
+type MerchantQueryParams struct {
+	MerchantID       string `json:"merchantId"`
+	Name             string `json:"name"`
+	MerchantCategory string `json:"merchantCategory"`
+	CreatedAt        string
+	Limit            int
+	Offset           int
+}
 
-	// Validate MerchantCategory
-	validCategories := []string{"SmallRestaurant", "MediumRestaurant", "LargeRestaurant", "MerchandiseRestaurant", "BoothKiosk", "ConvenienceStore"}
-	isValidCategory := false
-	for _, category := range validCategories {
-		if merchant.MerchantCategory == category {
-			isValidCategory = true
-			break
-		}
-	}
-	if !isValidCategory {
-		return errors.New("merchant_category must be one of the valid categories")
-	}
+type MerchantResponse struct {
+	MerchantId       int       `json:"merchantId"`
+	Name             string    `json:"name"`
+	MerchantCategory string    `json:"merchantCategory"`
+	ImageURL         string    `json:"imageUrl"`
+	Location         Location  `json:"location"`
+	CreatedAt        time.Time `json:"createdAt"`
+}
 
-	// Validate ImageURL
-	imageURLPattern := `^(http(s?):)([/|.|\w|\s|-])*\.(?:jpg|gif|png)$`
-	matched, err := regexp.MatchString(imageURLPattern, merchant.ImageURL)
-	if err != nil || !matched {
-		return errors.New("image_url must be a valid image URL")
-	}
-
-	// Validate Location
-	if merchant.Location.Lat == 0 || merchant.Location.Long == 0 {
-		return errors.New("latitude and longitude cannot be zero")
-	}
-
-	return nil
+type MerchantMetaResponse struct {
+	Limit  int `json:"limit"`
+	Offset int `json:"offset"`
+	Total  int `json:"total"`
 }

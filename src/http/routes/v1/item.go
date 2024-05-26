@@ -17,4 +17,5 @@ func (i *V1Routes) MountItem() {
 	itemController := itemController.New(itemService)
 
 	gMerchant.POST("/:merchantId/items", itemController.CreateItem)
+	gMerchant.GET("/:merchantId/items", itemController.GetAllItem)
 }

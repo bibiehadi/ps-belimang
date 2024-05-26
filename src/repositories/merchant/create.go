@@ -3,7 +3,6 @@ package merchantRepository
 import (
 	"belimang/src/entities"
 	"context"
-	"fmt"
 )
 
 func (r *merchantRepository) Create(merchant entities.Merchant) (entities.Merchant, error) {
@@ -12,7 +11,6 @@ func (r *merchantRepository) Create(merchant entities.Merchant) (entities.Mercha
 	err := r.db.QueryRow(context.Background(), query, merchant.Name, merchant.MerchantCategory, merchant.ImageURL, merchant.Latitude, merchant.Longitude).Scan(
 		&merchantId,
 	)
-	fmt.Println(err)
 	if err != nil {
 		return entities.Merchant{}, err
 	}
