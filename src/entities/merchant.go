@@ -5,12 +5,13 @@ import (
 )
 
 type Merchant struct {
-	ID               int       `json:"id"`
-	Name             string    `json:"name"`
-	MerchantCategory string    `json:"merchantCategory"`
-	ImageURL         string    `json:"imageUrl"`
-	Latitude         float64   `json:"latitude"`
-	Longitude        float64   `json:"longitude"`
+	ID               int     `json:"id"`
+	Name             string  `json:"name"`
+	MerchantCategory string  `json:"merchantCategory"`
+	ImageURL         string  `json:"imageUrl"`
+	Latitude         float64 `json:"latitude"`
+	Longitude        float64 `json:"longitude"`
+	Range            float64
 	CreatedAt        time.Time `json:"createdAt"`
 	UpdatedAt        time.Time `json:"updatedAt"`
 }
@@ -31,6 +32,8 @@ type MerchantQueryParams struct {
 	MerchantID       string `json:"merchantId"`
 	Name             string `json:"name"`
 	MerchantCategory string `json:"merchantCategory"`
+	Lat              float64
+	Long             float64
 	CreatedAt        string
 	Limit            int
 	Offset           int
@@ -42,6 +45,7 @@ type MerchantResponse struct {
 	MerchantCategory string    `json:"merchantCategory"`
 	ImageURL         string    `json:"imageUrl"`
 	Location         Location  `json:"location"`
+	Distance         float64   `json:"distance"`
 	CreatedAt        time.Time `json:"createdAt"`
 }
 
