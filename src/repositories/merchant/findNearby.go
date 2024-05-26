@@ -5,6 +5,7 @@ import (
 	"belimang/src/helpers"
 	"context"
 	"fmt"
+	"sort"
 	"strconv"
 	"strings"
 )
@@ -70,6 +71,10 @@ func (r *merchantRepository) FindNearby(params entities.MerchantQueryParams) ([]
 		}
 		Merchants = append(Merchants, mr)
 	}
+
+	sort.Slice(Merchants, func(i, j int) bool {
+		return Merchants[i].Distance < Merchants[j].Distance
+	})
 
 	var metaQuery string = "SELECT COUNT(*) FROM merchants"
 	metaRows, err := r.db.Query(context.Background(), metaQuery)
