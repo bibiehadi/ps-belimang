@@ -9,7 +9,7 @@ import (
 )
 
 func (r *itemRepository) GetAll(params entities.MerchantItemQueryParams) ([]entities.MerchantItemResponse, entities.MerchantItemMetaResponse, error) {
-	var query string = "SELECT id, name, product_category, price, image_url, merchant_id, created_at, updated_at FROM merchant_items"
+	var query string = "SELECT id, name, product_category, price, image_url, created_at FROM merchant_items"
 	conditions := "merchant_id = '" + params.MerchantId + "' AND"
 
 	// Filter by ID
@@ -49,7 +49,7 @@ func (r *itemRepository) GetAll(params entities.MerchantItemQueryParams) ([]enti
 	var Items []entities.MerchantItemResponse
 	for rows.Next() {
 		var item entities.MerchantItemResponse
-		err := rows.Scan()
+		err := rows.Scan(&item.ItemId, &item.Name, &item.ProductCategory, &item.Price, &item.ImageUrl, &item.CreatedAt)
 		if err != nil {
 			return []entities.MerchantItemResponse{}, entities.MerchantItemMetaResponse{}, err
 		}

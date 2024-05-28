@@ -7,7 +7,7 @@ import (
 	itemService "belimang/src/services/item"
 )
 
-func (i *V1Routes) MountItem() {
+func (i *V1Routes) MountMerchantItem() {
 	gAdmin := i.Echo.Group("/admin")
 	gMerchant := gAdmin.Group("/merchants")
 	gMerchant.Use(middlewares.RequireAuth())

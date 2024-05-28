@@ -2,16 +2,14 @@ package merchantRepository
 
 import (
 	"belimang/src/entities"
-	"belimang/src/helpers"
 	"context"
 	"fmt"
-	"sort"
 	"strconv"
 	"strings"
 )
 
 func (r *merchantRepository) FindNearby(params entities.MerchantQueryParams) ([]entities.MerchantResponse, entities.MerchantMetaResponse, error) {
-	query := "SELECT id, name, merchant_category, image_url, latitude, longitude, created_at FROM merchants WHERE 1=1"
+	query := "SELECT id, name, merchant_category, image_url, latitude, longitude, 2 * 6371 * asin( |/( sin(($1*(pi()/180)-latitude*(pi()/180))/2::decimal)^2 + (sin(($2*(pi()/180)-longitude*(pi()/180))/2::decimal)^2) * cos(latitude*(pi()/180)) * cos(5*(pi()/180)) ) ) as distance,created_at FROM merchants WHERE 1=1"
 
 	if params.MerchantID != "" {
 		query += fmt.Sprintf(" AND id = '%s'", params.MerchantID)
@@ -35,14 +33,14 @@ func (r *merchantRepository) FindNearby(params entities.MerchantQueryParams) ([]
 		}
 	}
 
-	if params.CreatedAt != "" {
-		if params.CreatedAt == "asc" || params.CreatedAt == "desc" {
-			query += fmt.Sprintf(" ORDER BY created_at %s", params.CreatedAt)
-		}
-	}
+	// if params.CreatedAt != "" {
+	// 	if params.CreatedAt == "asc" || params.CreatedAt == "desc" {
+	query += fmt.Sprintf(" ORDER BY distance %s", params.CreatedAt)
+	// 	}
+	// }
 
 	query += " LIMIT " + strconv.Itoa(params.Limit) + " OFFSET " + strconv.Itoa(params.Offset)
-	rows, err := r.db.Query(context.Background(), query)
+	rows, err := r.db.Query(context.Background(), query, params.Lat, params.Long)
 
 	if err != nil {
 		fmt.Println(err.Error())
@@ -53,7 +51,8 @@ func (r *merchantRepository) FindNearby(params entities.MerchantQueryParams) ([]
 	var Merchants []entities.MerchantResponse
 	for rows.Next() {
 		var merchant entities.Merchant
-		err := rows.Scan(&merchant.ID, &merchant.Name, &merchant.MerchantCategory, &merchant.ImageURL, &merchant.Latitude, &merchant.Longitude, &merchant.CreatedAt)
+		var distance float64
+		err := rows.Scan(&merchant.ID, &merchant.Name, &merchant.MerchantCategory, &merchant.ImageURL, &merchant.Latitude, &merchant.Longitude, &distance, &merchant.CreatedAt)
 		if err != nil {
 			return []entities.MerchantResponse{}, entities.MerchantMetaResponse{}, err
 		}
@@ -66,15 +65,11 @@ func (r *merchantRepository) FindNearby(params entities.MerchantQueryParams) ([]
 				Lat:  merchant.Latitude,
 				Long: merchant.Longitude,
 			},
-			Distance:  helpers.Haversine(params.Lat, params.Long, merchant.Latitude, merchant.Longitude),
+			Distance:  distance,
 			CreatedAt: merchant.CreatedAt,
 		}
 		Merchants = append(Merchants, mr)
 	}
-
-	sort.Slice(Merchants, func(i, j int) bool {
-		return Merchants[i].Distance < Merchants[j].Distance
-	})
 
 	var metaQuery string = "SELECT COUNT(*) FROM merchants"
 	metaRows, err := r.db.Query(context.Background(), metaQuery)
