@@ -15,7 +15,6 @@ func (controller *authController) RegisterUser(c echo.Context) error {
 	var registerRequest entities.RegisterRequest
 	bindError := c.Bind(&registerRequest)
 
-	fmt.Println(registerRequest)
 	if bindError != nil {
 		switch bindError.(type) {
 		case validator.ValidationErrors:

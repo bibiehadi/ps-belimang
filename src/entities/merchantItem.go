@@ -8,27 +8,27 @@ import (
 type MerchantItem struct {
 	ID              string          `json:"id"`
 	Name            string          `json:"name"`
-	ProductCategory ProductCategory `json:"product_category"`
+	ProductCategory ProductCategory `json:"productCategory"`
 	Price           int             `json:"price"`
-	ImageURL        string          `json:"image_url"`
-	MerchantID      uint            `json:"merchant_id"`
-	CreatedAt       time.Time       `json:"created_at"`
-	UpdatedAt       time.Time       `json:"updated_at"`
+	ImageURL        string          `json:"imageUrl"`
+	MerchantID      uint            `json:"merchantId"`
+	CreatedAt       time.Time       `json:"createdAt"`
+	UpdatedAt       time.Time       `json:"updatedAt"`
 	Merchant        *Merchant       `json:"merchant"` // Optional pointer to Merchant struct
 }
 
 type MerchantItemRequest struct {
 	Name            string `json:"name" validate:"required,min=2,max=30"`
-	ProductCategory string `json:"product_category" validate:"required,oneof=Beverage Food Snack Condiments Additions"`
+	ProductCategory string `json:"productCategory" validate:"required,oneof=Beverage Food Snack Condiments Additions"`
 	Price           int    `json:"price" validate:"required,numeric,min=1"`
-	ImageURL        string `json:"image_url" validate:"required,url"`
+	ImageURL        string `json:"imageUrl" validate:"required,url"`
 	MerchantID      string
 }
 
 type MerchantItemQueryParams struct {
 	ItemId          string `json:"itemId"`
 	Name            string `json:"name"`
-	ProductCategory string `json:"productCategory" validate:"oneof=Beverage Food Snack Condiments Additions"`
+	ProductCategory string `json:"productCategory"`
 	MerchantId      string `json:"merchantId"`
 	Limit           int    `json:"limit"`
 	Offset          int    `json:"offset"`
@@ -36,12 +36,12 @@ type MerchantItemQueryParams struct {
 }
 
 type MerchantItemResponse struct {
-	ItemId          string `json:"itemId"`
-	Name            string `json:"name"`
-	ProductCategory string `json:"productCategory"`
-	Price           int    `json:"price"`
-	ImageUrl        string `json:"imageUrl"`
-	CreatedAt       string `json:"createdAt"`
+	ItemId          string    `json:"itemId"`
+	Name            string    `json:"name"`
+	ProductCategory string    `json:"productCategory"`
+	Price           int       `json:"price"`
+	ImageUrl        string    `json:"imageUrl"`
+	CreatedAt       time.Time `json:"createdAt"`
 }
 type MerchantItemMetaResponse struct {
 	Limit  int `json:"limit"`

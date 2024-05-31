@@ -4,18 +4,20 @@ import (
 	"belimang/src/entities"
 	"encoding/json"
 	"fmt"
-	"github.com/go-playground/validator/v10"
-	"github.com/labstack/echo/v4"
 	"io"
 	"net/http"
+	"strconv"
+
+	"github.com/go-playground/validator/v10"
+	"github.com/labstack/echo/v4"
 )
 
 func (controller *itemController) GetAllItem(c echo.Context) error {
 	merchantId := c.Param("merchantId")
-	var itemParam entities.MerchantItemQueryParams
-	bindError := c.Bind(&itemParam)
+	var params entities.MerchantItemQueryParams
+	bindError := c.Bind(&params)
 
-	fmt.Println(itemParam)
+	fmt.Println(params)
 	if bindError != nil {
 		switch bindError.(type) {
 		case validator.ValidationErrors:
@@ -54,7 +56,37 @@ func (controller *itemController) GetAllItem(c echo.Context) error {
 		}
 	}
 
-	if err := controller.validator.Struct(itemParam); err != nil {
+	limitStr := c.QueryParam("limit")
+	if limitStr != "" {
+		limit, err := strconv.Atoi(limitStr)
+		if err == nil && limit > 0 {
+			params.Limit = limit
+		} else {
+			return c.JSON(http.StatusBadRequest, entities.ErrorResponse{
+				Status:  false,
+				Message: "Invalid limit parameter",
+			})
+		}
+	} else {
+		params.Limit = 5
+	}
+
+	offsetStr := c.QueryParam("offset")
+	if offsetStr != "" {
+		offset, err := strconv.Atoi(offsetStr)
+		if err == nil && offset >= 0 {
+			params.Offset = offset
+		} else {
+			return c.JSON(http.StatusBadRequest, entities.ErrorResponse{
+				Status:  false,
+				Message: "Invalid offset parameter",
+			})
+		}
+	} else {
+		params.Offset = 0
+	}
+
+	if err := controller.validator.Struct(params); err != nil {
 		var validationErrors []string
 		for _, err := range err.(validator.ValidationErrors) {
 			validationErrors = append(validationErrors, fmt.Sprintf("%s is %s", err.Field(), err.Tag()))
@@ -64,8 +96,8 @@ func (controller *itemController) GetAllItem(c echo.Context) error {
 			Message: validationErrors,
 		})
 	}
-	itemParam.MerchantId = merchantId
-	items, meta, err := controller.ItemService.GetAll(itemParam)
+	params.MerchantId = merchantId
+	items, meta, err := controller.ItemService.GetAll(params)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, entities.ErrorResponse{
 			Status:  false,

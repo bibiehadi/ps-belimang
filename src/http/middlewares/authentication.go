@@ -2,6 +2,7 @@ package middlewares
 
 import (
 	"belimang/src/entities"
+	"fmt"
 	"net/http"
 	"os"
 	"strings"
@@ -45,8 +46,8 @@ func RequireAuth() echo.MiddlewareFunc {
 			// If the token is valid, proceed with the next middleware/handler
 
 			if claims, ok := token.Claims.(jwt.MapClaims); ok {
-				c.Set("jwtClaims", claims)
-
+				structClaims, _ := MapClaimsToCustomClaims(claims)
+				c.Set("jwtClaims", structClaims)
 			}
 			return next(c)
 		}
@@ -54,14 +55,14 @@ func RequireAuth() echo.MiddlewareFunc {
 	// Get the Authorization header value
 
 	// Check if the header is empty or doesn't start with "Bearer "
-
 }
 
 func AuthWithRole(role string) echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
-			claims := c.Get("jwtClaims").(jwt.MapClaims)
-			if claims["role"] != role {
+			claims := c.Get("jwtClaims").(*entities.CustomClaims)
+			// structClaims, _ := MapClaimsToCustomClaims(claims)
+			if claims.Role != role {
 				return c.JSON(http.StatusUnauthorized, entities.ErrorResponse{
 					Status:  false,
 					Message: "Unauthorized",
@@ -79,4 +80,35 @@ func AuthWithRole(role string) echo.MiddlewareFunc {
 		// }
 
 	}
+}
+
+func MapClaimsToCustomClaims(mapClaims jwt.MapClaims) (*entities.CustomClaims, error) {
+	userId, ok := mapClaims["userId"].(string)
+	if !ok {
+		return nil, fmt.Errorf("invalid userId")
+	}
+
+	username, ok := mapClaims["username"].(string)
+	if !ok {
+		return nil, fmt.Errorf("invalid username")
+	}
+
+	role, ok := mapClaims["role"].(string)
+	if !ok {
+		return nil, fmt.Errorf("invalid role")
+	}
+
+	expiresAt, ok := mapClaims["exp"].(float64) // JWT timestamps are usually float64
+	if !ok {
+		return nil, fmt.Errorf("invalid exp")
+	}
+
+	return &entities.CustomClaims{
+		UserId:   userId,
+		Username: username,
+		Role:     role,
+		StandardClaims: jwt.StandardClaims{
+			ExpiresAt: int64(expiresAt),
+		},
+	}, nil
 }

@@ -6,12 +6,10 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
-
-	"github.com/jackc/pgx/v5"
 )
 
-func (r *merchantRepository) FindAll(params entities.MerchantQueryParams) ([]entities.MerchantResponse, entities.MerchantMetaResponse, error) {
-	query := "SELECT id, name, merchant_category, image_url, latitude, longitude, created_at FROM merchants WHERE 1=1"
+func (r *merchantRepository) FindNearby(params entities.MerchantQueryParams) ([]entities.MerchantResponse, entities.MerchantMetaResponse, error) {
+	query := "SELECT id, name, merchant_category, image_url, latitude, longitude, 2 * 6371 * asin( |/( sin(($1*(pi()/180)-latitude*(pi()/180))/2::decimal)^2 + (sin(($2*(pi()/180)-longitude*(pi()/180))/2::decimal)^2) * cos(latitude*(pi()/180)) * cos(5*(pi()/180)) ) ) as distance,created_at FROM merchants WHERE 1=1"
 
 	if params.MerchantID != "" {
 		query += fmt.Sprintf(" AND id = '%s'", params.MerchantID)
@@ -35,14 +33,14 @@ func (r *merchantRepository) FindAll(params entities.MerchantQueryParams) ([]ent
 		}
 	}
 
-	if params.CreatedAt != "" {
-		if params.CreatedAt == "asc" || params.CreatedAt == "desc" {
-			query += fmt.Sprintf(" ORDER BY created_at %s", params.CreatedAt)
-		}
-	}
+	// if params.CreatedAt != "" {
+	// 	if params.CreatedAt == "asc" || params.CreatedAt == "desc" {
+	query += fmt.Sprintf(" ORDER BY distance %s", params.CreatedAt)
+	// 	}
+	// }
 
 	query += " LIMIT " + strconv.Itoa(params.Limit) + " OFFSET " + strconv.Itoa(params.Offset)
-	rows, err := r.db.Query(context.Background(), query)
+	rows, err := r.db.Query(context.Background(), query, params.Lat, params.Long)
 
 	if err != nil {
 		fmt.Println(err.Error())
@@ -53,7 +51,8 @@ func (r *merchantRepository) FindAll(params entities.MerchantQueryParams) ([]ent
 	var Merchants []entities.MerchantResponse
 	for rows.Next() {
 		var merchant entities.Merchant
-		err := rows.Scan(&merchant.ID, &merchant.Name, &merchant.MerchantCategory, &merchant.ImageURL, &merchant.Latitude, &merchant.Longitude, &merchant.CreatedAt)
+		var distance float64
+		err := rows.Scan(&merchant.ID, &merchant.Name, &merchant.MerchantCategory, &merchant.ImageURL, &merchant.Latitude, &merchant.Longitude, &distance, &merchant.CreatedAt)
 		if err != nil {
 			return []entities.MerchantResponse{}, entities.MerchantMetaResponse{}, err
 		}
@@ -66,6 +65,7 @@ func (r *merchantRepository) FindAll(params entities.MerchantQueryParams) ([]ent
 				Lat:  merchant.Latitude,
 				Long: merchant.Longitude,
 			},
+			Distance:  distance,
 			CreatedAt: merchant.CreatedAt,
 		}
 		Merchants = append(Merchants, mr)
@@ -90,16 +90,4 @@ func (r *merchantRepository) FindAll(params entities.MerchantQueryParams) ([]ent
 	meta.Offset = params.Offset
 
 	return Merchants, meta, nil
-}
-
-func (r *merchantRepository) FindById(id string) (entities.Merchant, error) {
-	var merchant entities.Merchant
-	var query string = "SELECT id, name, merchant_category, latitude, longitude, image_url, created_at FROM merchants WHERE id = $1 LIMIT 1"
-	err := r.db.QueryRow(context.Background(), query, id).Scan(&merchant.ID, &merchant.Name, &merchant.MerchantCategory, &merchant.Latitude, &merchant.Longitude, &merchant.ImageURL, &merchant.CreatedAt)
-	if err != nil {
-		if err == pgx.ErrNoRows {
-			return entities.Merchant{}, pgx.ErrNoRows
-		}
-	}
-	return merchant, err
 }

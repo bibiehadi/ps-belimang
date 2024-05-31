@@ -9,6 +9,7 @@ import (
 type ItemRepository interface {
 	Create(item entities.MerchantItemRequest) (entities.MerchantItem, error)
 	GetAll(params entities.MerchantItemQueryParams) ([]entities.MerchantItemResponse, entities.MerchantItemMetaResponse, error)
+	FindById(id string) (entities.MerchantItem, error)
 }
 
 type itemRepository struct {

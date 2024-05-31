@@ -1,6 +1,10 @@
 package entities
 
-import "time"
+import (
+	"time"
+
+	"github.com/golang-jwt/jwt"
+)
 
 type Auth struct {
 	Id        string    `json:"id" validate:"required"`
@@ -32,3 +36,10 @@ const (
 	User  Role = "user"
 	Admin Role = "admin"
 )
+
+type CustomClaims struct {
+	UserId   string `json:"userId"`
+	Username string `json:"username"`
+	Role     string `json:"role"`
+	jwt.StandardClaims
+}

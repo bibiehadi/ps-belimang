@@ -1,11 +1,9 @@
-CREATE TABLE merchant_items (
+CREATE TABLE ordered_merchants (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    product_category VARCHAR(100) NOT NULL,
-    price INT NOT NULL,
-    image_url VARCHAR(255) NOT NULL,
+    order_id INT NOT NULL,
     merchant_id INT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE,
     FOREIGN KEY (merchant_id) REFERENCES merchants(id) ON DELETE CASCADE
     );
