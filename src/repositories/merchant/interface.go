@@ -10,8 +10,7 @@ type MerchantRepository interface {
 	Create(merchant entities.Merchant) (entities.Merchant, error)
 	FindAll(params entities.MerchantQueryParams) ([]entities.MerchantResponse, entities.MerchantMetaResponse, error)
 	FindNearby(params entities.MerchantQueryParams) ([]entities.MerchantResponse, entities.MerchantMetaResponse, error)
-	// UsernameIsExist(username string) bool
-	// FindByUsername(username string) (entities.Merchant, error)
+	FindById(id string) (entities.Merchant, error)
 }
 
 type merchantRepository struct {

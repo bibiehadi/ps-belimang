@@ -67,7 +67,7 @@ func (controller *authController) Login(c echo.Context) error {
 
 	tokenString, _, err := controller.AuthService.Login(loginRequest)
 	if err != nil {
-		if err.Error() == "INVALID NIP OR PASSWORD" {
+		if err.Error() == "INVALID USERNAME OR PASSWORD" {
 			return c.JSON(http.StatusNotFound, entities.ErrorResponse{
 				Status:  false,
 				Message: err.Error(),

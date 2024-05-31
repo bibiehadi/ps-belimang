@@ -8,7 +8,7 @@ import (
 func ValidateUrl(url string) bool {
 	match, err := regexp.MatchString(`https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)`, url)
 	if err != nil {
-		fmt.Printf("error validating phone number: %w", err)
+		fmt.Printf("error validating phone number: %", err)
 		return false
 	}
 	if !match {

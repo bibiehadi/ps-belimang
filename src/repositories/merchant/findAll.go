@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
+
+	"github.com/jackc/pgx/v5"
 )
 
 func (r *merchantRepository) FindAll(params entities.MerchantQueryParams) ([]entities.MerchantResponse, entities.MerchantMetaResponse, error) {
@@ -88,4 +90,16 @@ func (r *merchantRepository) FindAll(params entities.MerchantQueryParams) ([]ent
 	meta.Offset = params.Offset
 
 	return Merchants, meta, nil
+}
+
+func (r *merchantRepository) FindById(id string) (entities.Merchant, error) {
+	var merchant entities.Merchant
+	var query string = "SELECT id, name, merchant_category, latitude, longitude, image_url, created_at FROM merchants WHERE id = $1 LIMIT 1"
+	err := r.db.QueryRow(context.Background(), query, id).Scan(&merchant.ID, &merchant.Name, &merchant.MerchantCategory, &merchant.Latitude, &merchant.Longitude, &merchant.ImageURL, &merchant.CreatedAt)
+	if err != nil {
+		if err == pgx.ErrNoRows {
+			return entities.Merchant{}, pgx.ErrNoRows
+		}
+	}
+	return merchant, err
 }

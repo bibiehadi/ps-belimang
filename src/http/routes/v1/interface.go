@@ -14,6 +14,7 @@ type iV1Routes interface {
 	MountAuth()
 	MountMerchant()
 	MountMerchantItem()
+	MountPurchase()
 }
 
 func New(v1Routes *V1Routes) iV1Routes {

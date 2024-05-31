@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
+
+	"github.com/jackc/pgx/v5"
 )
 
 func (r *itemRepository) GetAll(params entities.MerchantItemQueryParams) ([]entities.MerchantItemResponse, entities.MerchantItemMetaResponse, error) {
@@ -70,4 +72,16 @@ func (r *itemRepository) GetAll(params entities.MerchantItemQueryParams) ([]enti
 	fmt.Println(Items)
 	return Items, meta, nil
 
+}
+
+func (r *itemRepository) FindById(id string) (entities.MerchantItem, error) {
+	var item entities.MerchantItem
+	var query string = "SELECT id, name, product_category, price, image_url, merchant_id, created_at FROM merchant_items WHERE id = $1 LIMIT 1"
+	err := r.db.QueryRow(context.Background(), query, id).Scan(&item.ID, &item.Name, &item.ProductCategory, &item.Price, &item.ImageURL, &item.MerchantID, &item.CreatedAt)
+	if err != nil {
+		if err == pgx.ErrNoRows {
+			return entities.MerchantItem{}, pgx.ErrNoRows
+		}
+	}
+	return item, err
 }

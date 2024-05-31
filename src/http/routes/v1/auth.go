@@ -8,7 +8,7 @@ import (
 
 func (i *V1Routes) MountAuth() {
 	gAdmin := i.Echo.Group("/admin")
-	gUser := i.Echo.Group("/user")
+	gUser := i.Echo.Group("/users")
 
 	authRepository := authRepository.New(i.Db)
 	authService := authService.New(authRepository)
