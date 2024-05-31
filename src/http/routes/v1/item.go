@@ -9,8 +9,10 @@ import (
 
 func (i *V1Routes) MountMerchantItem() {
 	gAdmin := i.Echo.Group("/admin")
+
 	gMerchant := gAdmin.Group("/merchants")
 	gMerchant.Use(middlewares.RequireAuth())
+	gMerchant.Use(middlewares.AuthWithRole("admin"))
 
 	itemRepository := itemRepository.New(i.Db)
 	itemService := itemService.New(itemRepository)

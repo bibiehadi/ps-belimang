@@ -46,7 +46,6 @@ func RequireAuth() echo.MiddlewareFunc {
 
 			if claims, ok := token.Claims.(jwt.MapClaims); ok {
 				c.Set("jwtClaims", claims)
-
 			}
 			return next(c)
 		}
