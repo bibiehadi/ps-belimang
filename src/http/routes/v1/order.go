@@ -25,9 +25,7 @@ func (i *V1Routes) MountPurchase() {
 
 	g.POST("/estimate", orderController.Estimate)
 
-	g.POST("/orders", func(c echo.Context) error {
-		return c.HTML(http.StatusOK, fmt.Sprintf("API Base Code for %s", os.Getenv("ENVIRONMENT")))
-	})
+	g.POST("/orders", orderController.Order)
 	g.GET("/orders", func(c echo.Context) error {
 		return c.HTML(http.StatusOK, fmt.Sprintf("API Base Code for %s", os.Getenv("ENVIRONMENT")))
 	})
