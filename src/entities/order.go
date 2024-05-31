@@ -22,6 +22,16 @@ type EstimateResponse struct {
 	EstimateId           string  `json:"calculatedEstimateId" validate:"required"`
 }
 
+// type Order struct {
+// 	ID         int       `json:"id"`
+// 	UserId     string    `json:"user_id"`
+// 	Status     bool      `json:"status"`
+// 	TotalPrice int       `json:"total_price"`
+// 	MerchantId Merchant  `json:"merchant_id"`
+// 	CreatedAt  time.Time `json:"createdAt"`
+// 	UpdatedAt  time.Time `json:"updatedAt"`
+// }
+
 type OrderRequest struct {
 	OrderId string `json:"calculatedEstimateId" validate:"required"`
 }
