@@ -4,7 +4,6 @@ import (
 	"belimang/src/entities"
 	"belimang/src/helpers"
 	"errors"
-	"fmt"
 	"os"
 	"time"
 
@@ -13,7 +12,6 @@ import (
 
 func (service *authService) Login(loginRequest entities.LoginRequest) (string, entities.Auth, error) {
 	userData, err := service.authRepository.FindByUsername(loginRequest.Username)
-	fmt.Println(userData)
 
 	if err != nil {
 		return "", entities.Auth{}, errors.New("INVALID USERNAME OR PASSWORD")

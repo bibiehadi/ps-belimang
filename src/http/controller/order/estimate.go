@@ -12,6 +12,7 @@ import (
 func (controller *orderController) Estimate(c echo.Context) error {
 	var estimateRequest entities.EstimateRequest
 	bindError := c.Bind(&estimateRequest)
+	claims := c.Get("jwtClaims").(*entities.CustomClaims)
 
 	if bindError != nil {
 		return c.JSON(http.StatusBadRequest, entities.ErrorResponse{
@@ -70,7 +71,7 @@ func (controller *orderController) Estimate(c echo.Context) error {
 		}
 	}
 
-	order, err := controller.OrderService.Estimate(estimateRequest)
+	order, err := controller.OrderService.Estimate(estimateRequest, claims.UserId)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, entities.ErrorResponse{
 			Status:  false,

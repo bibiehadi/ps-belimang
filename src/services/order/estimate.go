@@ -4,25 +4,19 @@ import (
 	"belimang/src/entities"
 	"belimang/src/helpers"
 	"errors"
-	"fmt"
 	"sort"
 )
 
-func (service *orderService) Estimate(estimateRequest entities.EstimateRequest) (entities.EstimateResponse, error) {
+func (service *orderService) Estimate(estimateRequest entities.EstimateRequest, userId string) (entities.EstimateResponse, error) {
 
 	listLocation := make([]entities.Location, 0, len(estimateRequest.Orders)+1)
 	listLocation = append(listLocation, entities.Location{
 		Lat:  estimateRequest.UserLocation.Lat,
 		Long: estimateRequest.UserLocation.Long,
 	})
-	fmt.Println("before sorting")
-	fmt.Println(estimateRequest.Orders)
-
 	sort.Slice(estimateRequest.Orders, func(i, j int) bool {
 		return *estimateRequest.Orders[i].IsStartingPoint
 	})
-	fmt.Println("after sorting")
-	fmt.Println(estimateRequest.Orders)
 
 	var totalPrice float64 = 0.0
 
@@ -45,25 +39,23 @@ func (service *orderService) Estimate(estimateRequest entities.EstimateRequest) 
 			totalPrice += float64(orderItem.Quantity * item.Price)
 		}
 		listLocation = append(listLocation, merchLocation)
-		fmt.Println(merchLocation)
-		fmt.Println(listLocation)
 	}
 
 	_, totalDistance := helpers.NearestNeighbor(listLocation)
 
 	estDeliveryTime := totalDistance / (40.0 / 60.0)
-
-	fmt.Printf("total Price : %f", totalPrice)
-	fmt.Println()
-	fmt.Printf("total distance : %f", totalDistance)
-	fmt.Println()
-	fmt.Printf("estimate : %f", estDeliveryTime)
-	fmt.Println()
 	deliveryFee := totalDistance * 10000
+	orderId, err := service.orderRepository.Create(
+		estimateRequest, estDeliveryTime, totalDistance, totalPrice, deliveryFee, userId,
+	)
+
+	if err != nil {
+		return entities.EstimateResponse{}, err
+	}
 
 	return entities.EstimateResponse{
 		TotalPrice:           deliveryFee + totalPrice,
 		EstimateDeliveryTime: estDeliveryTime,
-		EstimateId:           "1",
+		EstimateId:           orderId,
 	}, nil
 }
