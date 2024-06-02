@@ -43,6 +43,17 @@ type MerchantItemResponse struct {
 	ImageUrl        string    `json:"imageUrl"`
 	CreatedAt       time.Time `json:"createdAt"`
 }
+
+type OrderItemResponse struct {
+	ItemId          string    `json:"itemId"`
+	Name            string    `json:"name"`
+	ProductCategory string    `json:"productCategory"`
+	Price           int       `json:"price"`
+	Quantity        int       `json:"quantity"`
+	ImageUrl        string    `json:"imageUrl"`
+	CreatedAt       time.Time `json:"createdAt"`
+}
+
 type MerchantItemMetaResponse struct {
 	Limit  int `json:"limit"`
 	Offset int `json:"offset"`

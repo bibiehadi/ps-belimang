@@ -10,6 +10,7 @@ type OrderResorderRepository interface {
 	Create(estimateRequest entities.EstimateRequest, estDeliveryTime, totalDistance, totalPrice, totalDeliveryFree float64, userId string) (string, error)
 	FindById(id string) (string, error)
 	Order(id string) (string, error)
+	FindAll(params entities.OrderQueryParams) ([]entities.GetOrderResponse, error)
 }
 
 type orderRepository struct {

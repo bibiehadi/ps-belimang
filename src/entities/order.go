@@ -39,3 +39,22 @@ type OrderRequest struct {
 type OrderResponse struct {
 	OrderId string `json:"orderId"`
 }
+
+type OrderQueryParams struct {
+	MerchantID       string `json:"merchantId"`
+	Name             string `json:"name"`
+	MerchantCategory string `json:"merchantCategory"`
+	CreatedAt        string
+	Limit            int
+	Offset           int
+}
+
+type GetOrderResponse struct {
+	OrderId string     `json:"orderId"`
+	Orders  []GetOrder `json:"orders"`
+}
+
+type GetOrder struct {
+	Merchant MerchantResponse    `json:"merchant"`
+	Items    []OrderItemResponse `json:"items"`
+}

@@ -10,6 +10,7 @@ import (
 type OrderService interface {
 	Estimate(estimateRequest entities.EstimateRequest, userId string) (entities.EstimateResponse, error)
 	Order(estimateId string) (string, error)
+	FindAll(params entities.OrderQueryParams) ([]entities.GetOrderResponse, error)
 }
 
 type orderService struct {

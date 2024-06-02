@@ -7,11 +7,6 @@ import (
 	merchantRepository "belimang/src/repositories/merchant"
 	orderRepository "belimang/src/repositories/order"
 	orderService "belimang/src/services/order"
-	"fmt"
-	"net/http"
-	"os"
-
-	"github.com/labstack/echo/v4"
 )
 
 func (i *V1Routes) MountPurchase() {
@@ -26,7 +21,5 @@ func (i *V1Routes) MountPurchase() {
 	g.POST("/estimate", orderController.Estimate)
 
 	g.POST("/orders", orderController.Order)
-	g.GET("/orders", func(c echo.Context) error {
-		return c.HTML(http.StatusOK, fmt.Sprintf("API Base Code for %s", os.Getenv("ENVIRONMENT")))
-	})
+	g.GET("/orders", orderController.FindAll)
 }
