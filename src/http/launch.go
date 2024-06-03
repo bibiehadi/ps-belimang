@@ -48,6 +48,7 @@ func (r *Http) Launch() {
 	v1.MountMerchant()
 	v1.MountMerchantItem()
 	v1.MountPurchase()
+	v1.MountUpload()
 
 	e.Logger.Fatal(e.Start(":8080"))
 }
