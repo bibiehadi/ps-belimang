@@ -11,7 +11,7 @@ import (
 )
 
 func (r *itemRepository) GetAll(params entities.MerchantItemQueryParams) ([]entities.MerchantItemResponse, entities.MerchantItemMetaResponse, error) {
-	var query string = "SELECT id, name, product_category, price, image_url, created_at FROM merchant_items"
+	var query string = `SELECT id, name, product_category, price, image_url, created_at FROM merchant_items`
 	conditions := "merchant_id = '" + params.MerchantId + "' AND"
 
 	// Filter by ID

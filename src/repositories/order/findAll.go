@@ -35,7 +35,7 @@ func (r *orderRepository) FindAll(params entities.OrderQueryParams) ([]entities.
 	JOIN order_items oi  ON orders.id = oi.order_id 
 	JOIN merchants m ON oi.merchant_id = m.id 
 	JOIN merchant_items mi ON oi.item_id = mi.id 
-	WHERE 1=1`
+	WHERE orders.status = true AND 1=1`
 
 	if params.MerchantID != "" {
 		query += fmt.Sprintf(" AND oi.merchant_id = '%s'", params.MerchantID)
