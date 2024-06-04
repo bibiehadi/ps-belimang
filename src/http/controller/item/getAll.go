@@ -105,8 +105,8 @@ func (controller *itemController) GetAllItem(c echo.Context) error {
 		})
 	}
 	return c.JSON(http.StatusOK, entities.SuccessGetAllResponse{
-		Message: "Success",
-		Data:    items,
-		Meta:    meta,
+		// Message: "Success",
+		Data: items,
+		Meta: meta,
 	})
 }

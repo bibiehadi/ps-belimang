@@ -91,9 +91,8 @@ func (controller *merchantController) Create(c echo.Context) error {
 		})
 	}
 
-	return c.JSON(http.StatusCreated, entities.SuccessResponse{
-		Message: "Merchant registered successfull",
-		Data:    merchant,
+	return c.JSON(http.StatusCreated, entities.MerchantPostResponse{
+		MerchantId: merchant,
 	})
 }
 

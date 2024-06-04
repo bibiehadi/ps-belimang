@@ -22,13 +22,8 @@ func (repository *orderRepository) Create(estimateRequest entities.EstimateReque
 	}
 
 	for _, merchant := range estimateRequest.Orders {
-		var merchantId string
-		if err = tx.QueryRow(context.Background(), "INSERT INTO ordered_merchants (order_id, merchant_id) VALUES ($1, $2) RETURNING id", orderId, merchant.MerchantId).Scan(&merchantId); err != nil {
-			return "", err
-		}
-
 		for _, item := range merchant.Items {
-			if _, err = tx.Exec(context.Background(), "INSERT INTO ordered_items (ordered_merchants_id, item_id, quantity) VALUES ($1, $2, $3)", merchantId, item.ItemId, item.Quantity); err != nil {
+			if _, err := tx.Exec(context.Background(), "INSERT INTO order_items (order_id, merchant_id, item_id, quantity) VALUES ($1, $2, $3, $4) RETURNING id", orderId, merchant.MerchantId, item.ItemId, item.Quantity); err != nil {
 				return "", err
 			}
 		}

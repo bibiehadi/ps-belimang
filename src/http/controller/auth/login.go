@@ -80,10 +80,7 @@ func (controller *authController) Login(c echo.Context) error {
 		})
 	}
 
-	return c.JSON(http.StatusOK, entities.SuccessResponse{
-		Message: "User login successfully",
-		Data: entities.AuthResponse{
-			Token: tokenString,
-		},
+	return c.JSON(http.StatusOK, entities.AuthResponse{
+		Token: tokenString,
 	})
 }

@@ -6,9 +6,9 @@ import (
 )
 
 type MerchantService interface {
-	Create(merchant entities.MerchantRequest) (entities.Merchant, error)
+	Create(request entities.MerchantRequest) (string, error)
 	FindAll(params entities.MerchantQueryParams) ([]entities.MerchantResponse, entities.MerchantMetaResponse, error)
-	FindNearby(params entities.MerchantQueryParams) ([]entities.MerchantResponse, entities.MerchantMetaResponse, error)
+	FindNearby(params entities.MerchantQueryParams) ([]entities.GetOrder, entities.MerchantMetaResponse, error)
 }
 
 type merchantService struct {

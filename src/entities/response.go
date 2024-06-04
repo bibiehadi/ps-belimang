@@ -6,9 +6,9 @@ type SuccessResponse struct {
 }
 
 type SuccessGetAllResponse struct {
-	Message string      `json:"message"`
-	Data    interface{} `json:"data"`
-	Meta    interface{} `json:"meta"`
+	// Message string      `json:"message"`
+	Data interface{} `json:"data"`
+	Meta interface{} `json:"meta"`
 }
 
 type ErrorResponse struct {

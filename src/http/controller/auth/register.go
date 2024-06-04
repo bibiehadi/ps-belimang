@@ -184,10 +184,7 @@ func (controller *authController) RegisterAdmin(c echo.Context) error {
 		})
 	}
 
-	return c.JSON(http.StatusCreated, entities.SuccessResponse{
-		Message: "Admin Registered successfull",
-		Data: entities.AuthResponse{
-			Token: token,
-		},
+	return c.JSON(http.StatusCreated, entities.AuthResponse{
+		Token: token,
 	})
 }

@@ -7,9 +7,9 @@ import (
 )
 
 type MerchantRepository interface {
-	Create(merchant entities.Merchant) (entities.Merchant, error)
+	Create(merchant entities.Merchant) (string, error)
 	FindAll(params entities.MerchantQueryParams) ([]entities.MerchantResponse, entities.MerchantMetaResponse, error)
-	FindNearby(params entities.MerchantQueryParams) ([]entities.MerchantResponse, entities.MerchantMetaResponse, error)
+	FindNearby(params entities.MerchantQueryParams) ([]entities.GetOrder, entities.MerchantMetaResponse, error)
 	FindById(id string) (entities.Merchant, error)
 }
 
