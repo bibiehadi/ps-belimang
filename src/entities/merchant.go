@@ -5,7 +5,7 @@ import (
 )
 
 type Merchant struct {
-	ID               int     `json:"id"`
+	ID               string  `json:"id"`
 	Name             string  `json:"name"`
 	MerchantCategory string  `json:"merchantCategory"`
 	ImageURL         string  `json:"imageUrl"`
@@ -39,8 +39,12 @@ type MerchantQueryParams struct {
 	Offset           int
 }
 
+type MerchantPostResponse struct {
+	MerchantId string `json:"merchantId"`
+}
+
 type MerchantResponse struct {
-	MerchantId       int       `json:"merchantId"`
+	MerchantId       string    `json:"merchantId"`
 	Name             string    `json:"name"`
 	MerchantCategory string    `json:"merchantCategory"`
 	ImageURL         string    `json:"imageUrl"`

@@ -72,13 +72,13 @@ func (controller *orderController) FindAll(c echo.Context) error {
 
 	if orders == nil || reflect.ValueOf(orders).IsNil() {
 		return c.JSON(http.StatusOK, entities.SuccessGetAllResponse{
-			Message: "success",
-			Data:    []entities.GetOrderResponse{},
+			// Message: "success",
+			Data: []entities.GetOrderResponse{},
 		})
 	}
 
 	return c.JSON(http.StatusOK, entities.SuccessGetAllResponse{
-		Message: "success",
-		Data:    orders,
+		// Message: "success",
+		Data: orders,
 	})
 }

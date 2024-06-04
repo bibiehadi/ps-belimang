@@ -2,7 +2,7 @@ package merchantservice
 
 import "belimang/src/entities"
 
-func (s *merchantService) Create(request entities.MerchantRequest) (entities.Merchant, error) {
+func (s *merchantService) Create(request entities.MerchantRequest) (string, error) {
 
 	merchant := entities.Merchant{
 		Name:             request.Name,

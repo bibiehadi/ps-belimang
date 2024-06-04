@@ -31,7 +31,7 @@ func (r *Http) Launch() {
 	))
 
 	// Mount all routes here
-	basePath := "/v1"
+	basePath := ""
 	baseUrl := e.Group(basePath)
 	baseUrl.GET("", func(c echo.Context) error {
 		return c.HTML(http.StatusOK, fmt.Sprintf("API Base Code for %s", os.Getenv("ENVIRONMENT")))

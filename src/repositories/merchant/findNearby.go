@@ -59,7 +59,7 @@ func (r *merchantRepository) FindNearby(params entities.MerchantQueryParams) ([]
 
 	defer rows.Close()
 	var Merchants []entities.GetOrder
-	merchantMap := make(map[int]*entities.GetOrder)
+	merchantMap := make(map[string]*entities.GetOrder)
 	for rows.Next() {
 		var merchant entities.Merchant
 		var item entities.MerchantItemResponse

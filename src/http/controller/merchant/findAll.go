@@ -70,15 +70,15 @@ func (controller *merchantController) FindAll(c echo.Context) error {
 
 	if merchants == nil || reflect.ValueOf(merchants).IsNil() {
 		return c.JSON(http.StatusOK, entities.SuccessGetAllResponse{
-			Message: "success",
-			Data:    []entities.Merchant{},
-			Meta:    entities.MerchantMetaResponse{},
+			// Message: "success",
+			Data: []entities.Merchant{},
+			Meta: entities.MerchantMetaResponse{},
 		})
 	}
 
 	return c.JSON(http.StatusOK, entities.SuccessGetAllResponse{
-		Message: "success",
-		Data:    merchants,
-		Meta:    meta,
+		// Message: "success",
+		Data: merchants,
+		Meta: meta,
 	})
 }

@@ -5,7 +5,6 @@ import (
 	"context"
 	"fmt"
 	"strconv"
-	"strings"
 
 	"github.com/jackc/pgx/v5"
 )
@@ -18,7 +17,7 @@ func (r *merchantRepository) FindAll(params entities.MerchantQueryParams) ([]ent
 	}
 
 	if params.Name != "" {
-		query += fmt.Sprintf(" AND LOWER(name) LIKE '%%%s%%'", strings.ToLower(params.Name))
+		query += fmt.Sprintf(" AND name LIKE '%%%s%%'", params.Name)
 	}
 
 	if params.MerchantCategory != "" {
@@ -39,6 +38,8 @@ func (r *merchantRepository) FindAll(params entities.MerchantQueryParams) ([]ent
 		if params.CreatedAt == "asc" || params.CreatedAt == "desc" {
 			query += fmt.Sprintf(" ORDER BY created_at %s", params.CreatedAt)
 		}
+	} else {
+		query += " ORDER BY created_at DESC"
 	}
 
 	query += " LIMIT " + strconv.Itoa(params.Limit) + " OFFSET " + strconv.Itoa(params.Offset)
