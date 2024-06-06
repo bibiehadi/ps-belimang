@@ -25,6 +25,10 @@ type MerchantItemRequest struct {
 	MerchantID      string
 }
 
+type MerchantItemPostResponse struct {
+	ItemId string `json:"itemId"`
+}
+
 type MerchantItemQueryParams struct {
 	ItemId          string `json:"itemId"`
 	Name            string `json:"name"`

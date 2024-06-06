@@ -2,6 +2,7 @@ package itemcontroller
 
 import (
 	"belimang/src/entities"
+	"belimang/src/helpers"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -66,6 +67,13 @@ func (controller *itemController) CreateItem(c echo.Context) error {
 		})
 	}
 
+	if !helpers.ValidateUrl(itemRequest.ImageURL) {
+		return c.JSON(http.StatusBadRequest, entities.ErrorResponse{
+			Status:  false,
+			Message: "Image URL is not valid",
+		})
+	}
+
 	itemRequest.MerchantID = merchantId
 	item, err := controller.ItemService.Create(itemRequest)
 	if err != nil {
@@ -74,11 +82,8 @@ func (controller *itemController) CreateItem(c echo.Context) error {
 			Message: err.Error(),
 		})
 	}
-	return c.JSON(http.StatusCreated, entities.SuccessResponse{
-		Message: "Item Created successfull",
-		Data: entities.CreateMerchantItemResponse{
-			ItemId: item.ID,
-		},
+	return c.JSON(http.StatusCreated, entities.MerchantItemPostResponse{
+		ItemId: item.ID,
 	})
 
 }
