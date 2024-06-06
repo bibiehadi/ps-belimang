@@ -93,11 +93,8 @@ func (controller *authController) RegisterUser(c echo.Context) error {
 		})
 	}
 
-	return c.JSON(http.StatusCreated, entities.SuccessResponse{
-		Message: "User registered successfull",
-		Data: entities.AuthResponse{
-			Token: token,
-		},
+	return c.JSON(http.StatusCreated, entities.AuthResponse{
+		Token: token,
 	})
 }
 

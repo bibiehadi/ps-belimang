@@ -2,6 +2,7 @@ package merchantRepository
 
 import (
 	"belimang/src/entities"
+	"belimang/src/helpers"
 	"context"
 	"fmt"
 	"strconv"
@@ -69,6 +70,13 @@ func (r *merchantRepository) FindNearby(params entities.MerchantQueryParams) ([]
 		if err != nil {
 			return []entities.GetOrder{}, entities.MerchantMetaResponse{}, err
 		}
+		fmt.Println("haversine : ", helpers.Haversine(entities.Location{
+			Lat:  params.Lat,
+			Long: params.Long,
+		}, entities.Location{
+			Lat:  merchant.Latitude,
+			Long: merchant.Longitude,
+		}))
 
 		_, merchantExist := merchantMap[merchant.ID]
 		if !merchantExist {

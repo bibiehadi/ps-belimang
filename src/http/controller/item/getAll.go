@@ -55,6 +55,12 @@ func (controller *itemController) GetAllItem(c echo.Context) error {
 
 		}
 	}
+	if createdAt := c.QueryParam("createdAt"); createdAt != "" {
+		if createdAt != "asc" && createdAt != "desc" {
+		} else {
+			params.CreatedAt = createdAt
+		}
+	}
 
 	limitStr := c.QueryParam("limit")
 	if limitStr != "" {
