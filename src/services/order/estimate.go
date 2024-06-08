@@ -4,6 +4,7 @@ import (
 	"belimang/src/entities"
 	"belimang/src/helpers"
 	"errors"
+	"fmt"
 	"sort"
 )
 
@@ -14,9 +15,18 @@ func (service *orderService) Estimate(estimateRequest entities.EstimateRequest, 
 		Lat:  estimateRequest.UserLocation.Lat,
 		Long: estimateRequest.UserLocation.Long,
 	})
+	var isStartingPoint int = 0
 	sort.Slice(estimateRequest.Orders, func(i, j int) bool {
+		if *estimateRequest.Orders[i].IsStartingPoint {
+			isStartingPoint++
+		}
 		return *estimateRequest.Orders[i].IsStartingPoint
 	})
+
+	if isStartingPoint > 1 || isStartingPoint == 0 {
+		return entities.EstimateResponse{}, errors.New("starting point must have 1")
+
+	}
 
 	var totalPrice float64 = 0.0
 
@@ -26,10 +36,12 @@ func (service *orderService) Estimate(estimateRequest entities.EstimateRequest, 
 			return entities.EstimateResponse{}, err
 		}
 		merchLocation := entities.Location{Lat: merchant.Latitude, Long: merchant.Longitude}
-
-		if helpers.Haversine(estimateRequest.UserLocation, merchLocation) > 3.00 {
-			return entities.EstimateResponse{}, errors.New("MERCHANT LOCATION MORE THAN 3 KM")
-		}
+		fmt.Println("user Location : ", estimateRequest.UserLocation)
+		fmt.Println("merch Location : ", merchLocation)
+		fmt.Println("Distance : ", helpers.Haversine(estimateRequest.UserLocation, merchLocation))
+		// if helpers.Haversine(estimateRequest.UserLocation, merchLocation) > 3.00 {
+		// 	return entities.EstimateResponse{}, errors.New("MERCHANT LOCATION MORE THAN 3 KM")
+		// }
 
 		for _, orderItem := range merch.Items {
 			item, err := service.itemRepository.FindById(orderItem.ItemId)

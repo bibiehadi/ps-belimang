@@ -11,6 +11,8 @@ func (i *V1Routes) MountMerchant() {
 	gAdmin := i.Echo.Group("/admin")
 	gAdminMerchant := gAdmin.Group("/merchants")
 	gAdminMerchant.Use(middlewares.RequireAuth())
+	gAdminMerchant.Use(middlewares.AuthWithRole("admin"))
+
 	merchantRepository := merchantRepository.New(i.Db)
 	merchantService := merchantService.New(merchantRepository)
 	merchantController := merchantController.New(merchantService)
@@ -19,5 +21,6 @@ func (i *V1Routes) MountMerchant() {
 	gAdminMerchant.POST("", merchantController.Create)
 
 	gMerchant := i.Echo.Group("/merchants")
+	gMerchant.Use(middlewares.RequireAuth())
 	gMerchant.GET("/nearby/:latlong", merchantController.FindNearby)
 }

@@ -58,3 +58,8 @@ type MerchantMetaResponse struct {
 	Offset int `json:"offset"`
 	Total  int `json:"total"`
 }
+
+type MerchantNearbyResponse struct {
+	Merchant MerchantResponse       `json:"merchant"`
+	Items    []MerchantItemResponse `json:"items"`
+}

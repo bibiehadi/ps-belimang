@@ -110,6 +110,7 @@ func (controller *itemController) GetAllItem(c echo.Context) error {
 			Message: err.Error(),
 		})
 	}
+	fmt.Println("Items: ", items)
 	return c.JSON(http.StatusOK, entities.SuccessGetAllResponse{
 		// Message: "Success",
 		Data: items,

@@ -18,8 +18,20 @@ func (controller *merchantController) FindNearby(c echo.Context) error {
 			Message: "Invalide coordinates",
 		})
 	}
-	lat, _ := strconv.ParseFloat(latlong[0], 64)
-	long, _ := strconv.ParseFloat(latlong[1], 64)
+	lat, err := strconv.ParseFloat(latlong[0], 64)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, entities.ErrorResponse{
+			Status:  false,
+			Message: "Invalid latitude parameter",
+		})
+	}
+	long, err := strconv.ParseFloat(latlong[1], 64)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, entities.ErrorResponse{
+			Status:  false,
+			Message: "Invalid longitude parameter",
+		})
+	}
 
 	params := entities.MerchantQueryParams{}
 	params.Lat = lat

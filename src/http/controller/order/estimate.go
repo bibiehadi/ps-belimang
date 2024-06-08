@@ -79,8 +79,5 @@ func (controller *orderController) Estimate(c echo.Context) error {
 		})
 	}
 
-	return c.JSON(http.StatusCreated, entities.SuccessResponse{
-		Message: "Order successfull",
-		Data:    order,
-	})
+	return c.JSON(http.StatusOK, order)
 }
