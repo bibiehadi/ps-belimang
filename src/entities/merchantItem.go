@@ -11,7 +11,7 @@ type MerchantItem struct {
 	ProductCategory ProductCategory `json:"productCategory"`
 	Price           int             `json:"price"`
 	ImageURL        string          `json:"imageUrl"`
-	MerchantID      uint            `json:"merchantId"`
+	MerchantID      string          `json:"merchantId"`
 	CreatedAt       time.Time       `json:"createdAt"`
 	UpdatedAt       time.Time       `json:"updatedAt"`
 	Merchant        *Merchant       `json:"merchant"` // Optional pointer to Merchant struct

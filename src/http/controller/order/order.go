@@ -40,10 +40,8 @@ func (controller *orderController) Order(c echo.Context) error {
 		})
 	}
 
-	return c.JSON(http.StatusOK, entities.SuccessResponse{
-		Message: "Product updated successfully",
-		Data: entities.OrderResponse{
-			OrderId: orderId,
-		},
-	})
+	return c.JSON(http.StatusCreated, entities.OrderResponse{
+		OrderId: orderId,
+	},
+	)
 }

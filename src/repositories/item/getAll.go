@@ -3,7 +3,7 @@ package itemRepository
 import (
 	"belimang/src/entities"
 	"context"
-	"fmt"
+	"errors"
 	"strconv"
 	"strings"
 
@@ -41,19 +41,17 @@ func (r *itemRepository) GetAll(params entities.MerchantItemQueryParams) ([]enti
 	query += " LIMIT " + strconv.Itoa(params.Limit) + " OFFSET " + strconv.Itoa(params.Offset)
 	rows, err := r.db.Query(context.Background(), query)
 
-	fmt.Println(query)
-
 	if err != nil {
-		fmt.Println(err.Error())
+
 		return []entities.MerchantItemResponse{}, entities.MerchantItemMetaResponse{}, err
 	}
 	defer rows.Close()
-	var Items []entities.MerchantItemResponse
+	var Items []entities.MerchantItemResponse = []entities.MerchantItemResponse{}
 	for rows.Next() {
 		var item entities.MerchantItemResponse
 		err := rows.Scan(&item.ItemId, &item.Name, &item.ProductCategory, &item.Price, &item.ImageUrl, &item.CreatedAt)
 		if err != nil {
-			return []entities.MerchantItemResponse{}, entities.MerchantItemMetaResponse{}, err
+			return Items, entities.MerchantItemMetaResponse{}, err
 		}
 		Items = append(Items, item)
 	}
@@ -61,15 +59,15 @@ func (r *itemRepository) GetAll(params entities.MerchantItemQueryParams) ([]enti
 	metaQuery += conditions
 	metaRows, err := r.db.Query(context.Background(), query)
 	if err != nil {
-		fmt.Println(err.Error())
-		return []entities.MerchantItemResponse{}, entities.MerchantItemMetaResponse{}, err
+
+		return Items, entities.MerchantItemMetaResponse{}, err
 	}
 	defer metaRows.Close()
 	var meta entities.MerchantItemMetaResponse
 	metaRows.Scan(&meta.Total)
 	meta.Limit = params.Limit
 	meta.Offset = params.Offset
-	fmt.Println(Items)
+
 	return Items, meta, nil
 
 }
@@ -80,7 +78,7 @@ func (r *itemRepository) FindById(id string) (entities.MerchantItem, error) {
 	err := r.db.QueryRow(context.Background(), query, id).Scan(&item.ID, &item.Name, &item.ProductCategory, &item.Price, &item.ImageURL, &item.MerchantID, &item.CreatedAt)
 	if err != nil {
 		if err == pgx.ErrNoRows {
-			return entities.MerchantItem{}, pgx.ErrNoRows
+			return entities.MerchantItem{}, errors.New("ITEM NOT FOUND")
 		}
 	}
 	return item, err

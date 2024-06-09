@@ -44,17 +44,22 @@ type MerchantPostResponse struct {
 }
 
 type MerchantResponse struct {
-	MerchantId       string    `json:"merchantId"`
-	Name             string    `json:"name"`
-	MerchantCategory string    `json:"merchantCategory"`
-	ImageURL         string    `json:"imageUrl"`
-	Location         Location  `json:"location"`
-	Distance         float64   `json:"distance"`
-	CreatedAt        time.Time `json:"createdAt"`
+	MerchantId       string   `json:"merchantId"`
+	Name             string   `json:"name"`
+	MerchantCategory string   `json:"merchantCategory"`
+	ImageURL         string   `json:"imageUrl"`
+	Location         Location `json:"location"`
+	// Distance         float64   `json:"distance"`
+	CreatedAt time.Time `json:"createdAt"`
 }
 
 type MerchantMetaResponse struct {
 	Limit  int `json:"limit"`
 	Offset int `json:"offset"`
 	Total  int `json:"total"`
+}
+
+type MerchantNearbyResponse struct {
+	Merchant MerchantResponse       `json:"merchant"`
+	Items    []MerchantItemResponse `json:"items"`
 }

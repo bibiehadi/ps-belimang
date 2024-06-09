@@ -12,6 +12,7 @@ import (
 func (i *V1Routes) MountPurchase() {
 	g := i.Echo.Group("/users")
 	g.Use(middlewares.RequireAuth())
+	g.Use(middlewares.AuthWithRole("user"))
 	merchantRepository := merchantRepository.New(i.Db)
 	itemRepository := itemRepository.New(i.Db)
 	orderRepository := orderRepository.New(i.Db)

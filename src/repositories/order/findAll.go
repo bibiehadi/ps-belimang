@@ -68,7 +68,7 @@ func (r *orderRepository) FindAll(params entities.OrderQueryParams) ([]entities.
 	}
 
 	rows, err := r.db.Query(context.Background(), query, strconv.Itoa(params.Limit), strconv.Itoa(params.Offset))
-	// fmt.Println(query)
+	fmt.Println(query)
 	if err != nil {
 		fmt.Println(err.Error())
 		return []entities.GetOrderResponse{}, err

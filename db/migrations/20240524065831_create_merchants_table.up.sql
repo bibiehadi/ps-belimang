@@ -1,5 +1,5 @@
 CREATE TABLE merchants (
-    id SERIAL PRIMARY KEY,
+    id VARCHAR(255) PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     merchant_category VARCHAR(100) NOT NULL,
     image_url TEXT,

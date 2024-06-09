@@ -3,6 +3,8 @@ package helpers
 import (
 	"fmt"
 	"regexp"
+
+	"github.com/google/uuid"
 )
 
 func ValidateUrl(url string) bool {
@@ -16,4 +18,9 @@ func ValidateUrl(url string) bool {
 		return false
 	}
 	return true
+}
+
+func IsValidUUID(u string) bool {
+	_, err := uuid.Parse(u)
+	return err == nil
 }
