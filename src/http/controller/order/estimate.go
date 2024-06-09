@@ -50,13 +50,6 @@ func (controller *orderController) Estimate(c echo.Context) error {
 			count++
 		}
 
-		if count > 1 {
-			return c.JSON(http.StatusBadRequest, entities.ErrorResponse{
-				Status:  false,
-				Message: "Starting Point more than one",
-			})
-		}
-
 		for _, item := range element.Items {
 			if err := controller.validator.Struct(item); err != nil {
 				var validationErrors []string
@@ -71,8 +64,27 @@ func (controller *orderController) Estimate(c echo.Context) error {
 		}
 	}
 
+	if count > 1 || count == 0 {
+		return c.JSON(http.StatusBadRequest, entities.ErrorResponse{
+			Status:  false,
+			Message: "Starting Point is must only one",
+		})
+	}
+
 	order, err := controller.OrderService.Estimate(estimateRequest, claims.UserId)
 	if err != nil {
+		if err.Error() == "MERCHANT NOT FOUND" {
+			return c.JSON(http.StatusNotFound, entities.ErrorResponse{
+				Status:  false,
+				Message: err.Error(),
+			})
+		}
+		if err.Error() == "ITEM NOT FOUND" {
+			return c.JSON(http.StatusNotFound, entities.ErrorResponse{
+				Status:  false,
+				Message: err.Error(),
+			})
+		}
 		return c.JSON(http.StatusBadRequest, entities.ErrorResponse{
 			Status:  false,
 			Message: err.Error(),

@@ -3,6 +3,7 @@ package merchantRepository
 import (
 	"belimang/src/entities"
 	"context"
+	"errors"
 	"fmt"
 	"strconv"
 
@@ -99,7 +100,7 @@ func (r *merchantRepository) FindById(id string) (entities.Merchant, error) {
 	err := r.db.QueryRow(context.Background(), query, id).Scan(&merchant.ID, &merchant.Name, &merchant.MerchantCategory, &merchant.Latitude, &merchant.Longitude, &merchant.ImageURL, &merchant.CreatedAt)
 	if err != nil {
 		if err == pgx.ErrNoRows {
-			return entities.Merchant{}, pgx.ErrNoRows
+			return entities.Merchant{}, errors.New("MERCHANT NOT FOUND")
 		}
 	}
 	return merchant, err

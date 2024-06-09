@@ -1,8 +1,8 @@
 CREATE TABLE order_items (
     id SERIAL PRIMARY KEY,
     order_id INT NOT NULL,
-    merchant_id INT NOT NULL,
-    item_id INT NOT NULL,
+    merchant_id VARCHAR(255) NOT NULL,
+    item_id VARCHAR(255) NOT NULL,
     quantity INT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

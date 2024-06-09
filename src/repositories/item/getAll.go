@@ -3,6 +3,7 @@ package itemRepository
 import (
 	"belimang/src/entities"
 	"context"
+	"errors"
 	"strconv"
 	"strings"
 
@@ -77,7 +78,7 @@ func (r *itemRepository) FindById(id string) (entities.MerchantItem, error) {
 	err := r.db.QueryRow(context.Background(), query, id).Scan(&item.ID, &item.Name, &item.ProductCategory, &item.Price, &item.ImageURL, &item.MerchantID, &item.CreatedAt)
 	if err != nil {
 		if err == pgx.ErrNoRows {
-			return entities.MerchantItem{}, pgx.ErrNoRows
+			return entities.MerchantItem{}, errors.New("ITEM NOT FOUND")
 		}
 	}
 	return item, err

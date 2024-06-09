@@ -138,7 +138,7 @@ func (r *merchantRepository) FindNearby(params entities.MerchantQueryParams) ([]
 					Lat:  merchant.Latitude,
 					Long: merchant.Longitude,
 				},
-				Distance:  distance,
+				// Distance:  distance,
 				CreatedAt: merchant.CreatedAt,
 			},
 			Items: listItem,
