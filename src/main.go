@@ -17,4 +17,6 @@ func main() {
 	defer db.InitDB().Close()
 
 	h.Launch()
+
+	//test ci/cd
 }
